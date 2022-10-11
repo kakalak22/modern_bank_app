@@ -2,10 +2,17 @@ import React from "react";
 import { features } from "../constant";
 import styles, { layout } from "../constant/style";
 import Button from "./Button";
+import { motion } from "framer-motion";
 
-const FeatureCard = ({ icon, title, content, index }) => {
+const FeatureCard = ({ icon, title, content, index, delay }) => {
   return (
-    <div
+    <motion.div
+      initial={{ x: 800, opacity: 0 }}
+      whileInView={{ x: 0, opacity: 1 }}
+      transition={{
+        duration: 1.4,
+        delay: delay,
+      }}
       className={`flex flex-row p-6 rounded-[20px] ${
         index !== features.length ? "mb-6" : "mb-0"
       } feature-card`}
@@ -24,27 +31,51 @@ const FeatureCard = ({ icon, title, content, index }) => {
           {content}
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
 const Business = () => {
   return (
-    <section id="features" className={`${layout.section}`}>
-      <div className={layout.sectionInfo}>
-        <h2 className={styles.heading2}>
+    <section id="features" className={`${layout.section} mt-28`}>
+      <motion.div className={layout.sectionInfo}>
+        <motion.h2
+          initial={{ x: -500, opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          transition={{
+            duration: 1.4,
+            delay: 0.6,
+          }}
+          className={styles.heading2}
+        >
           You do the business, <br className="sm:block hidden" />
           we will handle the money.
-        </h2>
+        </motion.h2>
 
-        <p className={`${styles.paragraph} max-w-[470px] mt-5`}>
+        <motion.p
+          initial={{ x: -500, opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          transition={{
+            duration: 1.4,
+            delay: 0.8,
+          }}
+          className={`${styles.paragraph} max-w-[470px] mt-5`}
+        >
           With the right credit card, you can improve your financial life by
           building credit, earning rewards and saving money. But with hundreds
           of credit cards on the market.
-        </p>
-
-        <Button styles="mt-10" />
-      </div>
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          transition={{
+            duration: 1.4,
+            delay: 1,
+          }}
+        >
+          <Button styles="mt-10" />
+        </motion.div>
+      </motion.div>
 
       <div className={`${layout.sectionImg} flex-col`}>
         {features.map((feature, index) => (
@@ -54,6 +85,7 @@ const Business = () => {
             title={feature.title}
             content={feature.content}
             index={index}
+            delay={0.5 + (index * 2) / 10}
           />
         ))}
       </div>

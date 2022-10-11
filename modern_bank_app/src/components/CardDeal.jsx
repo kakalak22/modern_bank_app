@@ -2,22 +2,48 @@ import React from "react";
 import { card } from "../assets";
 import styles, { layout } from "../constant/style";
 import Button from "./Button";
+import { motion } from "framer-motion";
 
 const CardDeal = () => {
   return (
     <section className={layout.section}>
       <div className={layout.sectionInfo}>
-        <h2 className={styles.heading2}>
+        <motion.h2
+          initial={{ x: 500, opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          transition={{
+            duration: 1.5,
+            delay: 0.6,
+          }}
+          className={styles.heading2}
+        >
           Find a better card deal <br className="sm:block hidden" /> in few easy
           step
-        </h2>
+        </motion.h2>
 
-        <p className={`${styles.paragraph} max-w-[470px] mt-5`}>
+        <motion.p
+          initial={{ x: 500, opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          transition={{
+            duration: 1.5,
+            delay: 0.8,
+          }}
+          className={`${styles.paragraph} max-w-[470px] mt-5`}
+        >
           Elit enim sed massa etiam. Mauris eu adipiscing ultrices ametodio
           aenean neque. Fusce ipsum orci rhoncus aliporttitor integer platea
           placerat.
-        </p>
-        <Button styles="mt-10" />
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{
+            duration: 1.5,
+            delay: 1,
+          }}
+        >
+          <Button styles="mt-10" />
+        </motion.div>
       </div>
 
       <div className={layout.sectionImg}>
