@@ -1,7 +1,7 @@
 import React from "react";
 import { stats } from "../constant";
 import styles from "../constant/style";
-import Counter from "./Counter";
+import Counter from "./common/Counter";
 
 const Stats = () => {
   return (

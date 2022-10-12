@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { features } from "../constant";
 import styles, { layout } from "../constant/style";
 import Button from "./Button";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
-const FeatureCard = ({ icon, title, content, index, delay }) => {
+const FeatureCard = ({ icon, title, content, index, delay, featureCtrl }) => {
   return (
     <motion.div
       initial={{ x: 800, opacity: 0 }}
-      whileInView={{ x: 0, opacity: 1 }}
+      animate={featureCtrl}
       transition={{
-        duration: 1.4,
+        duration: 1.2,
         delay: delay,
       }}
       className={`flex flex-row p-6 rounded-[20px] ${
@@ -36,15 +37,33 @@ const FeatureCard = ({ icon, title, content, index, delay }) => {
 };
 
 const Business = () => {
+  const featureCtrl = useAnimation();
+  const buttonCtrl = useAnimation();
+
+  const { ref, inView } = useInView({
+    threshold: 0.5,
+    triggerOnce: true,
+  });
+
+  const animationSequence = async () => {
+    await featureCtrl.start({ x: 0, opacity: 1 });
+    return await buttonCtrl.start({ scale: [1.5, 1], opacity: 1 });
+  };
+
+  useEffect(() => {
+    if (inView) {
+      animationSequence();
+    }
+  }, [inView]);
+
   return (
-    <section id="features" className={`${layout.section} mt-28`}>
-      <motion.div className={layout.sectionInfo}>
+    <section id="features" className={`${layout.section} mt-10`}>
+      <motion.div ref={ref} className={layout.sectionInfo}>
         <motion.h2
           initial={{ x: -500, opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
+          animate={featureCtrl}
           transition={{
-            duration: 1.4,
-            delay: 0.6,
+            duration: 1.2,
           }}
           className={styles.heading2}
         >
@@ -54,10 +73,10 @@ const Business = () => {
 
         <motion.p
           initial={{ x: -500, opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
+          animate={featureCtrl}
           transition={{
-            duration: 1.4,
-            delay: 0.8,
+            duration: 1.2,
+            delay: 0.5,
           }}
           className={`${styles.paragraph} max-w-[470px] mt-5`}
         >
@@ -66,11 +85,10 @@ const Business = () => {
           of credit cards on the market.
         </motion.p>
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={buttonCtrl}
           transition={{
-            duration: 1.4,
-            delay: 1,
+            duration: 1.2,
           }}
         >
           <Button styles="mt-10" />
@@ -86,6 +104,7 @@ const Business = () => {
             content={feature.content}
             index={index}
             delay={0.5 + (index * 2) / 10}
+            featureCtrl={featureCtrl}
           />
         ))}
       </div>

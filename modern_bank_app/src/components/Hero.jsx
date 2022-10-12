@@ -1,21 +1,52 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "../constant/style";
 import { discount, robot } from "../assets";
 import GetStarted from "./GetStarted";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 const Hero = () => {
+  const discountDivControl = useAnimation();
+  const headingCtrl_1 = useAnimation();
+  const headingCtrl_2 = useAnimation();
+  const headingCtrl_3 = useAnimation();
+  const paragraphCtrl = useAnimation();
+  const buttonCtrl = useAnimation();
+
+  const animationSequence = async () => {
+    await headingCtrl_1.start({ opacity: 1, scale: 1 });
+    await headingCtrl_2.start({ opacity: 1, scale: [1.5, 1] });
+    await headingCtrl_3.start({ opacity: 1, scale: 1 });
+    await paragraphCtrl.start({ opacity: 1, scale: 1 });
+    await discountDivControl.start({ opacity: 1, scale: 1 });
+    return await buttonCtrl.start({ opacity: 1, scale: [1.5, 1, 1.3, 1] });
+  };
+
+  const { ref, inView } = useInView({
+    threshold: 0.5,
+    triggerOnce: true,
+  });
+
+  useEffect(() => {
+    if (inView) {
+      animationSequence();
+    }
+    if (!inView) {
+      console.log("Hero not in view");
+    }
+  }, [inView]);
+
   return (
-    <section id="home" className={`flex md:flex-row flex-col mt-6`}>
+    <section id="home" className={`flex md:flex-row flex-col mt-6`} ref={ref}>
       <div
         className={`flex-1 ${styles.flexStart} flex-col xl:px-0 sm:px-16 px-6`}
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          animate={discountDivControl}
           transition={{
-            duration: 0.8,
-            delay: 1.2,
+            duration: 0.5,
+            delay: 0,
           }}
           className="flex flex-row items-center py-[6px] px-4 bg-discount-gradient rounded-[10px] mb-2 "
         >
@@ -28,30 +59,49 @@ const Hero = () => {
         </motion.div>
 
         <div className="flex flex-row justify-between items-center w-full">
-          <motion.h1
-            initial={{ opacity: 0, scale: 0.5 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+          <div>
+            <motion.h1
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={headingCtrl_1}
+              transition={{
+                duration: 0.8,
+              }}
+              className="flex-1 font-poppins font-semibold ss:text-[72px] text-[52px] text-white ss:leading-[100px] leading-[75px]"
+            >
+              The Next <br className="sm:block hidden" />{" "}
+            </motion.h1>
+
+            <motion.h1
+              initial={{ opacity: 0, scale: 0 }}
+              animate={headingCtrl_2}
+              transition={{
+                duration: 0.8,
+              }}
+              className=" flex-1 font-poppins font-semibold ss:text-[72px] text-[52px]  ss:leading-[100px] leading-[75px] text-gradient"
+            >
+              Generation
+            </motion.h1>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={buttonCtrl}
             transition={{
               duration: 0.8,
-              delay: 0.5,
+              damping: 3,
+              type: "spring",
             }}
-            className="flex-1 font-poppins font-semibold ss:text-[72px] text-[52px] text-white ss:leading-[100px] leading-[75px]"
+            className="ss:flex hidden md:mr-4 mr-0"
           >
-            The Next <br className="sm:block hidden" />{" "}
-            <span className="text-gradient">Generation</span>
-          </motion.h1>
-
-          <div className="ss:flex hidden md:mr-4 mr-0">
             <GetStarted />
-          </div>
+          </motion.div>
         </div>
 
         <motion.h1
           initial={{ opacity: 0, scale: 0.5 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          animate={headingCtrl_3}
           transition={{
             duration: 0.8,
-            delay: 0.7,
           }}
           className=" font-poppins font-semibold ss:text-[68px] text-[52px] text-white ss:leading-[100px] leading-[75px] w-full"
         >
@@ -60,10 +110,9 @@ const Hero = () => {
 
         <motion.p
           initial={{ opacity: 0, scale: 0.5 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          animate={paragraphCtrl}
           transition={{
-            duration: 0.8,
-            delay: 0.9,
+            duration: 0.6,
           }}
           className={`${styles.paragraph} max-w-[470px] mt-5`}
         >
